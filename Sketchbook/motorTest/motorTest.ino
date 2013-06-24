@@ -1,3 +1,11 @@
+/*
+Test moteur (L293D)
+
+Auteur: Eric Brunner
+Date: 24 juin 2013
+
+Veuillez vous référer à cette page github si vous utilisez ce code.
+*/
 #define A 12
 #define B 11 
 #define E 10
@@ -29,7 +37,9 @@ void loop(){
   }
 }
 
-//forward function
+/*Hésitez pas à utiliser les 4 fonctions ci-dessous ensemble. Elles
+sont utiles dans toutes les situations ou vous aurez à controller un
+moteur*/
 void motor(int speedo){
   if (abs(speedo) > 255){
     halt(A,B);
@@ -46,6 +56,7 @@ void motor(int speedo){
   }
 }
 
+//forward function
 void forward(byte pin1, byte pin2, byte pinEnable, byte speedo){
   digitalWrite(pin1, HIGH);
   digitalWrite(pin2, LOW);
