@@ -1,24 +1,25 @@
 import java.io.*;
 import java.net.*;
-
-class UDPClient
+public class UdpClient 
 {
-   public static void main(String args[]) throws Exception
-   {
-      BufferedReader inFromUser =
-         new BufferedReader(new InputStreamReader(System.in));
-      DatagramSocket clientSocket = new DatagramSocket();
-      InetAddress IPAddress = InetAddress.getByName("localhost");
-      byte[] sendData = new byte[1024];
-      byte[] receiveData = new byte[1024];
-      String sentence = inFromUser.readLine();
-      sendData = sentence.getBytes();
-      DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
-      clientSocket.send(sendPacket);
-      DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-      clientSocket.receive(receivePacket);
-      String modifiedSentence = new String(receivePacket.getData());
-      System.out.println("FROM SERVER:" + modifiedSentence);
-      clientSocket.close();
-   }
+	public static void main(String args[])throws Exception
+	{
+		BufferedReader FromUser = new BufferedReader(new InputStreamReader(System.in));
+		DatagramSocket SocketClient = new DatagramSocket();
+		InetAddress IPAddress = InetAddress.getByName("localhost");
+		
+		byte[] SendData = new byte[1024];
+		byte[] ReceiveData = new byte[1024];
+		String Sentense = FromUser.readLine();
+		SendData = Sentense.getBytes();
+		
+		DatagramPacket SendPacket = new DatagramPacket(SendData, SendData.length, IPAddress, 5874);
+		SocketClient.send(SendPacket);
+		
+		DatagramPacket ReceivePacket = new DatagramPacket(ReceiveData, ReceiveData.length);
+		SocketClient.receive(ReceivePacket);
+		
+		String NewSentense = new String(ReceivePacket.getData());
+		SocketClient.close();
+	}
 }
