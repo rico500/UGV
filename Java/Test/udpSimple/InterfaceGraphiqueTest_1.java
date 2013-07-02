@@ -8,8 +8,8 @@
 	JLabel keyState;
     JButton quit;
     JButton connect;
-    char send;
-    String adresseIp = "";
+    int send;
+    public static String adresseIp = "";
     String psk = "";
     String username = "";
       public InterfaceGraphiqueTest_1()
@@ -38,6 +38,8 @@
         		
         		JOptionPane password = new JOptionPane();
         		psk = password.showInputDialog(null, "Mot de passe", JOptionPane.QUESTION_MESSAGE);
+        		
+        		connect.setVisible(false);
         	}
         	
         });
@@ -68,14 +70,14 @@
          public void keyPressed(KeyEvent e)
          {
             System.out.println("Key Pressed!!!");
-         	pressedKey.setText("Key " + e.getKeyChar()+ " is pressed");
-         	send = e.getKeyChar();
+         	pressedKey.setText("Key " + e.getKeyCode()+ " is pressed");
+         	send = e.getKeyCode();
          }
       
          public void keyReleased(KeyEvent e)
          {
             System.out.println("Key Released!!!");
-            pressedKey.setText("Key " + e.getKeyChar()+ " was released");         
+            pressedKey.setText("Key " + e.getKeyCode()+ " was released");         
          }
          
          public void keyTyped(KeyEvent e){}
@@ -87,5 +89,16 @@
          InterfaceGraphiqueTest_1 keyListener = new InterfaceGraphiqueTest_1();
          keyListener.setVisible(true);
       } 
-   
+   public Object[]envoi(){
+	   Object[] DonnéesConnexion = {adresseIp, username, psk, send};
+	   return DonnéesConnexion;
+	 /*to get the values:
+	  * Object[] whatever = envoi();
+	  * adresseIp = (String)whatever[0];
+	  * username = (String)whatever[1];
+	  * psk = (String)whatever[2];
+	  * send = (int)whatever[3];
+	  */
+	    
+   }
    }
