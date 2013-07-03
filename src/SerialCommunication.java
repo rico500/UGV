@@ -19,11 +19,13 @@ public class SerialCommunication implements SerialPortEventListener {
 		}
 		
 		
-	/*--------PUBLIC METHODS--------*/
-	   /**
-	     * @return	A HashSet containing the CommPortIdentifier for all serial 
-	     * 			ports that are not currently being used.
-	     */
+		/*--------PUBLIC METHODS--------*/
+		/** Finds all available ports of "Serial" type and tests them. The ports where connection
+	    * was successful are than stored in a HashSet.
+	    * 	
+	    * @return	A HashSet containing the CommPortIdentifier for all serial 
+	    * 			ports that are not currently being used.
+	    */
 	    public HashSet<CommPortIdentifier> getAvailableSerialPorts() {
 	        HashSet<CommPortIdentifier> h = new HashSet<CommPortIdentifier>();
 	        Enumeration thePorts = CommPortIdentifier.getPortIdentifiers();
@@ -48,8 +50,13 @@ public class SerialCommunication implements SerialPortEventListener {
 	    }
 
 	    
-	    /* Establishes serial connection on given port at given baudRate
-	     * @param portName - name of one of the available ports. Ex: "/dev/ttyS33"
+	    /** 
+	     * Establishes serial connection on given port at given baudRate
+	     * 
+	     * @author http://rxtx.qbang.org/wiki/index.php/Discovering_available_comm_ports
+	     * @param portName - 	name of one of the available ports. Ex: "/dev/ttyS33"
+	     * @param baudRate - 	desired baudRate. baud is a unit meaning symbols per second,
+	     * 						or in this case bits per second.
 	     * */
 	    public void connect(String portName, int baudRate){
 	    	try{
@@ -77,10 +84,9 @@ public class SerialCommunication implements SerialPortEventListener {
 	    	} catch (UnsupportedCommOperationException ucoe) {
 	    		System.err.println("Opperation on port /dev/"+ portName+ " could not be executed. \nException:\n"+ucoe+"\n");
 			
-	    	} catch (TooManyListenersException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				
+	    	} catch (TooManyListenersException tmle) {
+	    		System.err.println("There are too many listeners on port /dev/"+ portName+ "\nException:\n"+tmle+"\n");
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -88,7 +94,12 @@ public class SerialCommunication implements SerialPortEventListener {
 	    	
 	    }
 	    
-	    
+	    /**
+	     * Simple method to write a String to the device. Can only be called after connection is
+	     * established using the connect() method.
+	     * @author Eric Brunner
+	     * @param message - desired message to be sent
+	     * */
 	    public void write(String message){
 	    	try{
 	    		byte[] buffer = message.getBytes();
@@ -102,17 +113,24 @@ public class SerialCommunication implements SerialPortEventListener {
 	    	System.out.println("A message was sent:\n"+ message);
 	    }
 	    
-	
 	    
+	    /**
+	     * Close serial port.
+	     * */
 	    public void closePort(){
 	    	serialPort.close();
 	    	
 	    }
 	    
 	    /**
-	     * Handle serial events. Dispatches the event to event-specific
-	     * methods.
-	     * @param event The serial event
+	     * Handle serial events.
+	     * 
+	     * If one wishes to handle a SerialPortEvent of a different type a switch case coul be added.
+	     * Refer to http://en.wikibooks.org/wiki/Serial_Programming/Serial_Java#Simple_Reading_of_Data_.28Polling.29
+	     * for more information.
+	     * 
+	     * @author Eric Brunner
+	     * @param event - The serial event
 	     */
 	    @Override
 	    public void serialEvent(SerialPortEvent event){
@@ -128,17 +146,6 @@ public class SerialCommunication implements SerialPortEventListener {
 				e.printStackTrace();
 			}
 	    }
-	    
-	    /*--------STATIC METHODS---------*/
-	
-	private static String askForPort() throws IOException{
-	    	
-	    	//Ask which port the user would like to use.
-		    System.out.println("Enter your choice of available serial ports:");
-		    BufferedReader dataIn = new BufferedReader( new InputStreamReader(System.in) );
-		    String port = new String(dataIn.readLine());
-		    return port;
-	    }
 
 	
 	
@@ -146,18 +153,23 @@ public class SerialCommunication implements SerialPortEventListener {
 	/*---------MAIN METHOD---------*/
 
 	public static void main (String[] args) throws IOException, InterruptedException{
+		
 		SerialCommunication serialCommunication = new SerialCommunication();
 		
+		//get the available ports in case they would be needed
 	    HashSet<CommPortIdentifier> availableSerialPorts = new HashSet<CommPortIdentifier>();
-	    
 	    availableSerialPorts = serialCommunication.getAvailableSerialPorts();
 	    
+	    //establish connection
 	    serialCommunication.connect("/dev/ttyS33", 9600);
-	   
+	    
+	    //write a test String
 	    serialCommunication.write("Test");
 	    
+	    //keep the app alive for 10 sec so SerialPortEvents can be captured
 	    Thread.sleep(10000);
 	    
+	    //close port before shutdown
 	    serialCommunication.closePort();
 	    }
 	
