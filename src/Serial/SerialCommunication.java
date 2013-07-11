@@ -1,7 +1,6 @@
+package Serial;
 import gnu.io.*;
-
 import java.io.*;
-import java.lang.*;
 import java.util.*;
 
 public class SerialCommunication implements SerialPortEventListener {
@@ -11,8 +10,8 @@ public class SerialCommunication implements SerialPortEventListener {
 	
 	SerialPort serialPort;
 	
-	InputStream in;
-	OutputStream out;
+	private InputStream in;
+	private OutputStream out;
 
 		public SerialCommunication(){
 
@@ -28,7 +27,7 @@ public class SerialCommunication implements SerialPortEventListener {
 	    */
 	    public HashSet<CommPortIdentifier> getAvailableSerialPorts() {
 	        HashSet<CommPortIdentifier> h = new HashSet<CommPortIdentifier>();
-	        Enumeration thePorts = CommPortIdentifier.getPortIdentifiers();
+	        Enumeration<CommPortIdentifier> thePorts = CommPortIdentifier.getPortIdentifiers();
 	        while (thePorts.hasMoreElements()) {
 	            CommPortIdentifier com = (CommPortIdentifier) thePorts.nextElement();
 	            switch (com.getPortType()) {
