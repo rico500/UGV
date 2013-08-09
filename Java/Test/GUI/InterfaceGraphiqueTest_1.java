@@ -29,8 +29,8 @@ public class InterfaceGraphiqueTest_1 extends JFrame
    private JPanel optionTab;
    private JPanel helpTab;
    private JPanel quitTab;
-   private JLabel ok;
-   private JLabel noOk;
+   private JLabel ok, ok1, ok2, ok3;
+   private JLabel noOk, noOk1, noOk2, noOk3;
    
    private String upString = "w";
    private String downString = "s";
@@ -59,7 +59,7 @@ public class InterfaceGraphiqueTest_1 extends JFrame
    JTextField userNameTextField = new JTextField("pi");
    JTextField pskTextField = new JTextField("raspberry");
    
-   public static boolean debugging = true; //Disable this boolean to disable the debugs messages
+   public static boolean debugging = false; //Disable this boolean to disable the debugs messages
    boolean connectionTabBool = true;
    Matcher checkAddress;
    
@@ -68,7 +68,7 @@ public class InterfaceGraphiqueTest_1 extends JFrame
       setTitle("IHM travail de matu");
       setSize(500, 350);
       setBackground(Color.WHITE);
-      
+      System.out.println(System.getProperty("user.dir"));
       JPanel topPanel = new JPanel();
       topPanel.setLayout(new BorderLayout());
       getContentPane().add(topPanel);
@@ -95,11 +95,16 @@ public class InterfaceGraphiqueTest_1 extends JFrame
       
 	  connectionTab = new JPanel();
      connectionTab.setLayout(null);
-     Thread regex;
+     Thread regexIp;
+     Thread regexPort;
+     Thread regexName;
+     Thread regexPsk;
       
-     regex = new Thread(new Juste());
+     regexIp = new Thread(new IpRegex());
+     regexPort = new Thread(new PortRegex());
+     regexName = new Thread(new NameRegex());
+     regexPsk = new Thread(new PskRegex());
      
-      
       JLabel ipAddressLabel = new JLabel("Adresse IP");
 	   ipAddressLabel.setBounds(10, 15, 150 ,20);
 	   connectionTab.add(ipAddressLabel);
@@ -128,102 +133,165 @@ public class InterfaceGraphiqueTest_1 extends JFrame
 	   pskTextField.setBounds(150, 75, 150, 20);
 	   connectionTab.add(pskTextField);
       
-      regex.start();
-      
+	   regexPort.start();
+	   regexIp.start();
+	   regexName.start();
+	   regexPsk.start();
+	   Debugging.log("CONNECTION TAB: starting threads");
       
    }
    
-   class Juste implements Runnable
+   class IpRegex implements Runnable
    {
       public void run()
       {	 
-      	 Debugging.log("thread");
-
+      	 Debugging.log("CONNECTION TAB: [THREAD IP], start of the thread");
          String compareAddress = "[0-9]{1,3}(?:.[0-9]{1,3}){3}";
-
          while(connectionTabBool)
          {
         	 ipAddress = ipAddressTextField.getText();
-            try
-            {  Debugging.log("try");
-               
-               //Pattern p = Pattern.compile(compareAddress);
-               // checkAddress = p.matcher(ipAddress);
-               
-               if(compareAddress.matches(ipAddress)== false)
-	            {
-            	   noOk = new JLabel(new ImageIcon("faux.png"));
-                   noOk.setBounds(325, 15, 20, 20);
-                  /*ok.setVisible(false);
-                  noOk.setVisible(true);*/
-                  connectionTab.add(noOk);
-                  Debugging.log("Ip address is false!");
-             }
-	         if(compareAddress.find(ipAddress)== true)
-	         {
-	              ok = new JLabel(new ImageIcon("juste.png"));
-	              ok.setBounds(375, 15, 20, 20);
-                  connectionTab.add(ok);
-                  Debugging.log("Ip address is right");
-   	         }
-               Debugging.log("Second thread");
-               Thread.sleep(10);
-            }
-      	   catch(InterruptedException e)
-            {
-               Debugging.log("Catch ERROR!");
-            }
+        	 try
+        	 {
+        		 Debugging.log("try");
+   
+        		 if(ipAddress.matches(compareAddress)==false)
+        		 {
+        			 noOk = new JLabel(new ImageIcon("faux.png"));
+        			 noOk.setBounds(325, 15, 20, 20);
+        			 connectionTab.add(noOk);
+        			 Debugging.log("CONNECTION TAB: ip address is false!");
+        		 }
+        		 else//if(ipAddress.matches(compareAddress))
+        		 {
+        			 ok = new JLabel(new ImageIcon("juste.png"));
+        			 ok.setBounds(375, 15, 20, 20);
+        			 connectionTab.add(ok);
+        			 Debugging.log("CONNECTION TAB: ip address is right");
+        		 }
+        		 Debugging.log("CONNECTION TAB: [THREAD IP], end of the thread");
+        		 Thread.sleep(1000);
+        	 }
+        	 catch(InterruptedException e)
+        	 {
+        		 Debugging.log("Catch ERROR! [THREAD IP]");
+        	 }
          }//end of while  
       }//end of run()
 
    }//end of class Juste   
    
-	   
+   
+   class PortRegex implements Runnable
+   {
+	   public void run()
+	   {	
+		   Debugging.log("CONNECTION TAB: [THREAD PORT], strat of the thread");
+		   String comparePort = "[0-9]*";
+		   while(connectionTabBool)
+		   {	
+			   port =portTextField.getText();
+			   try
+			   {
+				   if(port.matches(comparePort) == false)
+				   {
+					   noOk1 = new JLabel(new ImageIcon("faux1.png"));
+					   noOk1.setBounds(325, 35, 20, 20);
+					   connectionTab.add(noOk1);
+					   Debugging.log("CONNECTION TAB: port is false");
+				   }
+				   else//if(port.matches(comparePort) == true)
+				   {
+					   ok1 = new JLabel(new ImageIcon("juste1.png"));
+					   ok1.setBounds(325, 35, 20, 20);
+					   connectionTab.add(ok1);
+					   Debugging.log("CONNECTiON TAB: port is right");
+				   }
+				   Debugging.log("CONNECTION TAB: [THREAD PORT], end of the thread");
+				   Thread.sleep(100);
+			   }
+			   catch(InterruptedException e)
+			   {
+				   Debugging.log("Catch ERROR! [THREAD PORT]");
+			   }
+		   }//end of while
+	   }//end of run()
+   }//end of PortRegex class
+   
+   
+   class NameRegex implements Runnable
+   {
+	   public void run()
+	   {
+		   Debugging.log("CONNECTION TAB: [THREAD NAME], start of the thread");
+		   String compareName = "[a-z0-9_-]";
+		   while(connectionTabBool)
+		   {
+			   userName = userNameTextField.getText();
+			   try
+			   {
+				   if(userName.matches(compareName) == false)
+				   {
+					   noOk2 = new JLabel(new ImageIcon("faux2.png"));
+					   noOk2.setBounds(325, 55, 20, 20);
+					   connectionTab.add(noOk2);
+					   Debugging.log("CONNECTION TAB: name is false ");
+				   }
+				   else//if(userName.matches(compareName) == true)
+				   {
+					   ok2 = new JLabel(new ImageIcon("juste2.png"));
+					   ok2.setBounds(325, 55, 20, 20);
+					   connectionTab.add(ok2);
+					   Debugging.log("CONNECTION TAB: name is right");
+				   }
+				   Thread.sleep(100);
+				   Debugging.log("CONNECTION TAB: [THREAD NAME], end of the thread");
+			   }
+			   
+			   catch(InterruptedException e)
+			   {
+				   Debugging.log("Catch ERROR! [THREAD NAME]");
+			   }
+		   }//end of while
+	   }//end of run()
+   }//end of NameRegex class
+   
+   class PskRegex implements Runnable
+   {
+	   public void run()
+	   {
+		   Debugging.log("CONNECTION TAB: [THREAD NAME], start of the thread");
+		   String comparePsk = "[a-z0-9_-]";
+		   while(connectionTabBool)
+		   {
+			   password = pskTextField.getText();
+			   try
+			   {
+				   if(password.matches(comparePsk) == false)
+				   {
+					   noOk3 = new JLabel(new ImageIcon("faux3.png"));
+					   noOk3.setBounds(325, 75, 20, 20);
+					   connectionTab.add(noOk3);
+				   }
+				   if(password.matches(comparePsk) == true)
+				   {
+					   ok3 = new JLabel(new ImageIcon("juste3.png"));
+					   ok3.setBounds(325, 75, 20, 20);
+					   connectionTab.add(ok3);
+				   }
+				   Thread.sleep(100);
+			   }
+			   
+			   catch(InterruptedException e)
+			   {
+				   Debugging.log("Catch ERROR! [THREAD NAME]");
+			   }
+		   }//end of while
+	   }//end of run()
+   }//end of PskRegex
+  
+
+   
       
-      
-      
-      /*   
-	   port = portTextField.getText();
-	   if(check == false)
-	   {
-		   noOk = new JLabel(new ImageIcon("faux.png"));
-		   noOk.setBounds(325, 35, 20, 20);
-		   connectionTab.add(noOk);
-	   }
-	   else
-	   {
-		   ok = new JLabel(new ImageIcon("juste.png"));
-		   ok.setBounds(325, 35, 20, 20);
-		   connectionTab.add(ok);
-	   }
-		   
-	   userName = userNameTextField.getText();
-	   if(check == false)
-	   {
-		   noOk = new JLabel(new ImageIcon("faux.png"));
-		   noOk.setBounds(325, 55, 20, 20);
-		   connectionTab.add(noOk);
-	   }
-	   else
-	   {
-		   ok = new JLabel(new ImageIcon("juste.png"));
-		   ok.setBounds(325, 55, 20, 20);
-		   connectionTab.add(ok);
-	   }
-		   
-	   password = pskTextField.getText();
-	   if(check == false)
-	   {
-		   noOk = new JLabel(new ImageIcon("faux.png"));
-		   noOk.setBounds(325, 75, 20, 20);
-		   connectionTab.add(noOk);
-	   }
-	   else
-	   {
-		   ok = new JLabel(new ImageIcon("juste.png"));
-		   ok.setBounds(325, 75, 20, 20);
-		   connectionTab.add(ok);
-	   }*/
 	   
 	  /*JButton accept = new JButton("OK");
 	  accept.setBounds(125, 100, 100, 50);
@@ -235,9 +303,10 @@ public class InterfaceGraphiqueTest_1 extends JFrame
    {
 	  
       controlTab = new JPanel();
-      controlTab.setLayout(new FlowLayout());
+      controlTab.setLayout(new GridBagLayout());
+      Thread video = new Thread(new VideoRecever());
       
-      
+      video.start();
       
       /*convert the Strings commands to Char commands*/
       
@@ -250,12 +319,22 @@ public class InterfaceGraphiqueTest_1 extends JFrame
       increaseMaxBreakChar = increaseMaxBreakString.charAt(0);
       decreaseMaxBreakChar = decreaseMaxBreakString.charAt(0);
       
-      
+      GridBagConstraints cc = new GridBagConstraints();
       Box videoBox = Box.createHorizontalBox();
-      JLabel waitForVideo = new JLabel("attente de la vidéo");
-      videoBox.add(waitForVideo);
-      controlTab.add(videoBox);
+	  JLabel waitForVideo = new JLabel("attente de la vidéo");
+	  videoBox.add(waitForVideo);
+	  cc.gridx = 0;
+	  cc.gridy = 0;
+	  controlTab.add(videoBox, cc);    
       
+   }
+   
+   class VideoRecever implements Runnable
+   {
+	   public void run()
+	   {
+		   
+	   }
    }
    
    public void createOptionTab()
@@ -368,20 +447,29 @@ public class InterfaceGraphiqueTest_1 extends JFrame
    {  
 	  quitTab = new JPanel();
       quitTab.setLayout(new BorderLayout());
-
+      Thread quit = new Thread(new Quittingpopup());
+      quit.start();
       Font warningFont = new Font("Seriaf", Font.PLAIN, 36);
             
       JLabel warningQuit = new JLabel("Attention!!!", JLabel.CENTER);
 
-      JButton quitButton = new JButton("Quitter");
-      quitButton.setIcon(new ImageIcon("dialog-error.png"));
+      
       warningQuit.setFont(warningFont);
       
       quitButton.addActionListener(new QuitButtonListener());
       quitTab.add(warningQuit, BorderLayout.CENTER);
-      quitTab.add(quitButton, BorderLayout.SOUTH);
+      
    }
    
+   class Quittingpopup implements Runnable
+   {
+	   public void run()
+	   {
+		   JButton quitButton = new JButton("Quitter");
+		   quitButton.setIcon(new ImageIcon("dialog-error.png"));
+		   quitTab.add(quitButton, BorderLayout.SOUTH);
+	   }
+   }
    private class KeyboardListener implements KeyListener
    {
       public void keyPressed(KeyEvent e)
