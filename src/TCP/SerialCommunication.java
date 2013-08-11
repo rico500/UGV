@@ -109,7 +109,7 @@ public class SerialCommunication implements SerialPortEventListener {
 	    		e.printStackTrace();
 	    		
 	    	}
-	    	System.out.println("A message was sent:\n"+ message);
+	    	System.out.println("Serial message: "+ message);
 	    }
 	    
 	    

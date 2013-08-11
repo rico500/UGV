@@ -21,38 +21,19 @@ public class Client {
 	    out = new PrintStream(clientSocket.getOutputStream());
 	    in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 		
-	    
-	    
-	    String message = "";
-	    String lastMessage = "";
-	    
-		//get user command
 		keyboard = new BufferedReader(new InputStreamReader(System.in));
-		String command;
-	
 		
 		while(clientActiv){
 			
-			//wait for user input
-			System.out.println("Enter command (ON or OFF or QUIT):");
-			command = keyboard.readLine();
+			String command = keyboard.readLine();		
+		
+			String outMessage = (new Protocol(command, false)).process();
 			
-			if(command.equals("ON") || command.equals("OFF")){
-				out.println(command);
-				System.out.println("A message was sent:" + command );
+			out.print(outMessage);
+			System.out.println(outMessage);
 				
-			}else if(command.equals("QUIT")){
-				end();
-				
-			}else
-				System.err.println("SYNTAXE: message can only be ON or OFF in capital letters");
+		
 		}
-		
-		//closing Client
-		clientSocket.close();
-		System.out.println("Closing client...");
-		System.exit(0);
-		
 		}catch(IOException e){
 			e.printStackTrace();
 			System.err.println("Connection at "+ args[0] +" on port 4444 could not be established");

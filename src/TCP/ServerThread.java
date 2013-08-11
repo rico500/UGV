@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 
 /***************************************************************************
@@ -44,6 +45,11 @@ public class ServerThread extends Thread {
     }
     
     public void run(){
+    	
+//    	final String on = new String("ON");
+    	
+    	try {
+    	
     	while(activThread){
     		System.out.println("-----> Le client " + clientSocket.getInetAddress().getHostName() 
     				+" est connecte <------");
@@ -52,7 +58,7 @@ public class ServerThread extends Thread {
     		
     		serialCom.connect("/dev/ttyS33", 9600);
     		
-    		try {
+    		
 				in = clientSocket.getInputStream();
 				out = clientSocket.getOutputStream();
 				
@@ -70,31 +76,42 @@ public class ServerThread extends Thread {
 					
 					byte[] inBuffer = new byte[1024]; 
 					
-					Thread.sleep(1000);
 					out.write(new String("beat").getBytes());
 					
-					if(in.available() > 0){
-						in.read(inBuffer);
-						System.out.println( "------> Le client " + clientSocket.getInetAddress().getHostName() 
-				    			+ " a envoye un message <-----");
+					in.read(inBuffer);
+					System.out.println( "------> Le client " + clientSocket.getInetAddress().getHostName() 
+			    			+ " a envoye un message <------");
 						
-						String message = new String(inBuffer);
+					String message = (new String(inBuffer));
+//					System.out.println(message);
 						
-						serialCom.write(message);
-								
-						}
+					StringTokenizer st = new StringTokenizer(message, "|");
+//						while(st.hasMoreTokens()){
+//							System.out.println(st.nextToken());
+//						}
+
+					message = st.nextToken();
+					if(message.equals("ON")){
+						serialCom.write("i");
+					}else if(message.equals("OFF")){
+						serialCom.write("o");
 					}
-					
-				}catch (IOException e) {
-				if(activThread) end();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+						
+				}
+				
+    	}	
+    	
+    	}catch (IOException e) {
+    		if(activThread) end();
+    	} catch (InterruptedException e) {
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
 			}
     		
-    	}
+    	
     	
     }
+    
     
     /**
      * 
