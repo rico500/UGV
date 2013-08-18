@@ -147,29 +147,4 @@ public class SerialCommunication implements SerialPortEventListener {
 	    }
 
 	
-	
-	
-	/*---------MAIN METHOD---------*/
-
-	public static void main (String[] args) throws IOException, InterruptedException{
-		
-		SerialCommunication serialCommunication = new SerialCommunication();
-		
-		//get the available ports in case they would be needed
-	    HashSet<CommPortIdentifier> availableSerialPorts = new HashSet<CommPortIdentifier>();
-	    availableSerialPorts = serialCommunication.getAvailableSerialPorts();
-	    
-	    //establish connection
-	    serialCommunication.connect("/dev/ttyS33", 9600);
-	    
-	    //write a test String
-	    serialCommunication.write("Test");
-	    
-	    //keep the app alive for 10 sec so SerialPortEvents can be captured
-	    Thread.sleep(10000);
-	    
-	    //close port before shutdown
-	    serialCommunication.closePort();
-	    }
-	
 }
