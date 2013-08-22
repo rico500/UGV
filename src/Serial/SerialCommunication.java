@@ -1,16 +1,19 @@
 package Serial;
 import gnu.io.*;
+
 import java.io.*;
 import java.util.*;
 
-public class SerialCommunication implements SerialPortEventListener {
+public class SerialCommunication 
+implements SerialPortEventListener
+{
 	
 	String portName;
 	int baudRate;
 	
-	SerialPort serialPort;
+	public 	SerialPort serialPort;
 	
-	private InputStream in;
+	public InputStream in;
 	private OutputStream out;
 
 		public SerialCommunication(){
@@ -70,8 +73,8 @@ public class SerialCommunication implements SerialPortEventListener {
 	    	out = serialPort.getOutputStream();
 	    	in = serialPort.getInputStream();
 	    	
-	    	serialPort.addEventListener(this);
-	    	serialPort.notifyOnDataAvailable(true);
+//	    	serialPort.addEventListener(this);
+//	    	serialPort.notifyOnDataAvailable(true);
 	    	
 	    	
 	    	}catch(NoSuchPortException nspe){
@@ -83,10 +86,12 @@ public class SerialCommunication implements SerialPortEventListener {
 	    	} catch (UnsupportedCommOperationException ucoe) {
 	    		System.err.println("Opperation on port /dev/"+ portName+ " could not be executed. \nException:\n"+ucoe+"\n");
 			
-	    	} catch (TooManyListenersException tmle) {
-	    		System.err.println("There are too many listeners on port /dev/"+ portName+ "\nException:\n"+tmle+"\n");
-
-			} catch (IOException e) {
+	    	} 
+//	    	catch (TooManyListenersException tmle) {
+//	    		System.err.println("There are too many listeners on port /dev/"+ portName+ "\nException:\n"+tmle+"\n");
+//
+//			} 
+	    	catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

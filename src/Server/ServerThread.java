@@ -8,7 +8,10 @@ import java.net.Socket;
 import java.util.StringTokenizer;
 
 
-public class ServerThread extends Thread {
+
+public class ServerThread 
+extends Thread 
+{
 
 	private Socket clientSocket; // Socket client
 	
@@ -40,10 +43,11 @@ public class ServerThread extends Thread {
 			System.err.println("ERROR: could not open communication streams with client.");
 		}
 		
+		//listen to new messages coming from the BufferedReader
 		StreamListenerThread slt = new StreamListenerThread(this, new StreamListener(){
 
 			@Override
-			public void OnEvent() {
+			public void onStreamEvent() {
 				
 				System.out.println("-----> Le client " + clientSocket.getInetAddress().getHostName() 
 						+" a envoyé un message<------");
@@ -61,6 +65,5 @@ public class ServerThread extends Thread {
 		}); 
 		
 		slt.start();
-			
 	}
 }

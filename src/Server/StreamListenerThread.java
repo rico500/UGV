@@ -18,11 +18,11 @@ public class StreamListenerThread extends Thread {
 		try{
 			while(serverThread.serverThreadActive){
 				serverThread.messageFromClient = new StringTokenizer(serverThread.in.readLine(), "|");
-				streamListener.OnEvent();
-				System.out.println("log");
+				streamListener.onStreamEvent();
+				//System.out.println("log");
 			}	
 		}catch(IOException e){
-			System.err.println("ERROR: geting message from server");
+			System.err.println("ERROR: getting message from client.");
 		}
 	}
 
