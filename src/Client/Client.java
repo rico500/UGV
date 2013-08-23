@@ -44,7 +44,6 @@ public class Client {
 			System.err.println("ERROR: could not open communication streams with client.");
 			e.printStackTrace();
 		}
-		 
 	}
 	
 	public static String getMessage() throws IOException{
@@ -60,7 +59,7 @@ public class Client {
 	public static void main(String[] args){
 		System.out.println("test");
 		
-		   InterfaceGraphiqueTest_1 mainFrame = new InterfaceGraphiqueTest_1();
+		   GUI mainFrame = new GUI();
 		   mainFrame.setVisible(true);
 		   mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
