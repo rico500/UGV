@@ -1,3 +1,12 @@
+/*This program
+ *
+ *
+ *
+ *
+ *
+ */
+
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -20,6 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.*;
 
 public class InterfaceGraphiqueTest_1 extends JFrame
 {  
@@ -40,6 +50,7 @@ public class InterfaceGraphiqueTest_1 extends JFrame
    private String decreaseMaxSpeedString = "f";
    private String increaseMaxBreakString = "t";
    private String decreaseMaxBreakString = "g";
+   //Everything that we'll send with the client is there//
    public char upChar;
    public char downChar;
    public char leftChar;
@@ -52,7 +63,9 @@ public class InterfaceGraphiqueTest_1 extends JFrame
    public String ipAddress;
    public String userName;
    public String password;
-   
+   char keyPressed;
+   char keyReleased;
+
    
    JTextField ipAddressTextField = new JTextField("192.168.1.2");
    JTextField portTextField = new JTextField("888");
@@ -304,6 +317,13 @@ public class InterfaceGraphiqueTest_1 extends JFrame
 	  
       controlTab = new JPanel();
       controlTab.setLayout(new GridBagLayout());
+      controlTab.setFocusable(true);
+      controlTab.requestFocus();
+      JTextField checkingKey = new JTextField();
+      checkingKey.addKeyListener(new KeyboardListener());
+      
+
+      
       Thread video = new Thread(new VideoRecever());
       
       video.start();
@@ -319,14 +339,20 @@ public class InterfaceGraphiqueTest_1 extends JFrame
       increaseMaxBreakChar = increaseMaxBreakString.charAt(0);
       decreaseMaxBreakChar = decreaseMaxBreakString.charAt(0);
       
+      
       GridBagConstraints cc = new GridBagConstraints();
       Box videoBox = Box.createHorizontalBox();
-	  JLabel waitForVideo = new JLabel("attente de la vidéo");
-	  videoBox.add(waitForVideo);
-	  cc.gridx = 0;
-	  cc.gridy = 0;
-	  controlTab.add(videoBox, cc);    
+	   JLabel waitForVideo = new JLabel("video");
+      waitForVideo.addKeyListener(new KeyboardListener());
+	   videoBox.add(waitForVideo);
+	   cc.gridx = 0;
+ 	   cc.gridy = 0;   
+      controlTab.add(videoBox, cc);    
       
+      cc.gridx = 1;
+      cc.gridy = 0;
+      controlTab.add(checkingKey, cc);
+            
    }
    
    class VideoRecever implements Runnable
@@ -445,14 +471,14 @@ public class InterfaceGraphiqueTest_1 extends JFrame
    
    public void createQuitTab()
    {  
-	  quitTab = new JPanel();
+	   quitTab = new JPanel();
       quitTab.setLayout(new BorderLayout());
       Thread quit = new Thread(new Quittingpopup());
       quit.start();
       Font warningFont = new Font("Seriaf", Font.PLAIN, 36);
             
       JLabel warningQuit = new JLabel("Attention!!!", JLabel.CENTER);
-
+      JButton quitButton = new JButton();
       
       warningQuit.setFont(warningFont);
       
@@ -470,18 +496,48 @@ public class InterfaceGraphiqueTest_1 extends JFrame
 		   quitTab.add(quitButton, BorderLayout.SOUTH);
 	   }
    }
+   
    private class KeyboardListener implements KeyListener
    {
       public void keyPressed(KeyEvent e)
       {  
          System.out.println("Key Pressed!");
+         keyPressed = e.getKeyChar();
+         if(keyPressed == upChar | keyPressed == downChar | keyPressed == leftChar
+            | keyPressed == rightChar | keyPressed == increaseMaxSpeedChar |
+            keyPressed == decreaseMaxSpeedChar | keyPressed == increaseMaxBreakChar
+            | keyPressed == decreaseMaxBreakChar)
+         {
+            /*Eric
+            *Appel de méthode client et envoie keyPressed  Juste un petit soucis quil faut que je corrige, je le ferais rapidement,
+            *c'est que il faut cliquer sur le jtextfield pour quele keyListener s'active, mais ça sera vite corriger tkt.
+            */
+            System.out.println(keyPressed);
+         }
+   
+         else
+         {
+         }
         
       }
       
       public void keyReleased(KeyEvent e)
       {
          System.out.println("Key Released!");
-         
+         keyReleased = e.getKeyChar();
+         if(keyPressed == upChar | keyPressed == downChar | keyPressed == leftChar
+            | keyPressed == rightChar | keyPressed == increaseMaxSpeedChar |
+            keyPressed == decreaseMaxSpeedChar | keyPressed == increaseMaxBreakChar
+            | keyPressed == decreaseMaxBreakChar)
+            {
+               /*Eric
+                *Apple de méthode client et envoit keyReleased
+                */
+            }
+            
+            else
+            {
+            }
       }
       
       public void keyTyped(KeyEvent e)
