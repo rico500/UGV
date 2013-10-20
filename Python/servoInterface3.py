@@ -21,6 +21,7 @@ except:
     ser = serial.Serial("/dev/ttyACM1", 9600)
 else:
     print "ERROR: Arduino not found"
+
 last_dir = ''
 last_mot = ''
 
@@ -84,7 +85,7 @@ class App(object):
              root.destroy()
 
          
-#set auto repeat mode
+#set auto repeat mode to off
 d=display.Display()
 d.change_keyboard_control(auto_repeat_mode=X.AutoRepeatModeOff)
 x=d.get_keyboard_control()
@@ -136,17 +137,6 @@ def update():
         last_mot = mot_command
         print ('update: '+ mot_command)
         ser.write(mot_command)
-
-    '''if dir_command != last_dir:
-        last_dir = dir_command
-        update = True
-
-    elif mot_command != last_mot:
-        last_mot = mot_command
-        update = True
-
-    if update == True:
-        print ('update: '+ dir_command+', '+ mot_command)'''
 
     #the 'update function is put back in root's queue every second.
     root.after(0, update)

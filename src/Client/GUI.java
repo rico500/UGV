@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -40,23 +41,19 @@ public class GUI extends JFrame
    private String downString = "s";
    private String leftString = "a";
    private String rightString = "d";
-   private String increaseMaxSpeedString = "r";
-   private String decreaseMaxSpeedString = "f";
-   private String increaseMaxBreakString = "t";
-   private String decreaseMaxBreakString = "g";
-   public char upChar;
-   public char downChar;
-   public char leftChar;
-   public char rightChar;
-   public char increaseMaxSpeedChar;
-   public char decreaseMaxSpeedChar;
-   public char increaseMaxBreakChar;
-   public char decreaseMaxBreakChar;
+   private String increaseMaxSpeedString = "w";
+   private String decreaseMaxSpeedString = "s";
+   private String increaseMaxBreakString = "d";
+   private String decreaseMaxBreakString = "a";
+   
    public int port;
    public String ipAddress;
-   
    JTextField ipAddressTextField = new JTextField("localhost");
    JTextField portTextField = new JTextField("4444");
+   //shows connection message
+   public static JLabel connectionMessage = new JLabel("Waiting for Connection...");
+   
+   public static JSlider SpeedSlider = new JSlider(JSlider.VERTICAL, 0, 150, 0);
    
    public static boolean debugging = false; //Disable this boolean to disable the debugs messages
    boolean connectionTabBool = true;
@@ -123,7 +120,10 @@ public class GUI extends JFrame
 		}
     	   
        });
-	   
+       
+       connectionMessage.setBounds(150, 155, 300, 80);
+       connectionTab.add(connectionMessage);
+       connectionMessage.setVisible(true);	   
       
    }
    
@@ -137,22 +137,16 @@ public class GUI extends JFrame
       
       video.start();
       
-      /*convert the Strings commands to Char commands*/
-      
-      upChar = upString.charAt(0);
-      downChar = downString.charAt(0);
-      leftChar = leftString.charAt(0);
-      rightChar = rightString.charAt(0);
-      increaseMaxSpeedChar = increaseMaxSpeedString.charAt(0);
-      decreaseMaxSpeedChar = decreaseMaxSpeedString.charAt(0);
-      increaseMaxBreakChar = increaseMaxBreakString.charAt(0);
-      decreaseMaxBreakChar = decreaseMaxBreakString.charAt(0);
-      
       JTextField controlField = new UGVKeyListener("control");
       controlField.setEditable(false);
       controlField.setBounds(150, 150, 100, 50);
       controlTab.add(controlField);
       
+      SpeedSlider.setMajorTickSpacing(20);
+      SpeedSlider.setPaintTicks(true);
+      SpeedSlider.setPaintLabels(true);
+      SpeedSlider.setBounds(400, 50, 100, 200);
+      controlTab.add(SpeedSlider);
    }
    
    class VideoRecever implements Runnable

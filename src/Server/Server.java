@@ -9,10 +9,12 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 import java.util.TooManyListenersException;
 
+import Client.GUI;
 import Serial.SerialCommunication;
 
 
@@ -21,7 +23,7 @@ public class Server {
 	public static SerialCommunication serial = new SerialCommunication();
 	public static HashMap<String, RequestHandler> RequestHandlers = new HashMap<String, RequestHandler>(); 
 	
-	private static ArrayList<ServerThread> serverThreads = new ArrayList<ServerThread>();
+	public static ArrayList<ServerThread> serverThreads = new ArrayList<ServerThread>();
 	
 	//get message from Client and returns StringTokenizer
 	public static StringTokenizer getMessage(BufferedReader in) throws IOException{
@@ -58,27 +60,30 @@ public class Server {
 	
 	private static void init() throws TooManyListenersException{
 		serial.connect("/dev/ttyS33", 9600);
+		
 		serial.serialPort.addEventListener(new SerialPortEventListener(){
 
 			@Override
 			public void serialEvent(SerialPortEvent arg0) {
-				String serialMessage = null;
-				System.out.println("Serial port event!");
-		    	byte[] buffer = new byte[1024];
-		    	try{
-					int length = serial.in.available();
-					
-					serial.in.read(buffer, 0, length);
-					serialMessage = new String(buffer);
-					System.out.println("Serial message: "+ serialMessage);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+//				String serialMessage = null;
+//				System.out.println("Serial port event!");
+//		    	byte[] buffer = new byte[1024];
+//		    	try{
+//					int length = serial.in.available();
+//					
+//					serial.in.read(buffer, 0, length);
+//					serialMessage = new String(buffer);
+//					System.out.println("Serial message: "+ serialMessage);
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//					
+//				}
 		    	
-		    	int i;
-		    	for(i = 0; i<serverThreads.size(); i++){
-		    		serverThreads.get(i).out.print(serialMessage);
-		    	}
+		    	
+//		    	}
+				
+				SerialMessage arduino = new SerialMessage();
+				arduino.dispatchMessage(arduino.getSerialMessage());
 			}
 			
 		});
@@ -89,9 +94,13 @@ public class Server {
 		RequestHandlers.put("OFF", new OFFRequestHandler());
 		RequestHandlers.put("FOR", new FORRequestHandler());
 		RequestHandlers.put("BAK", new BAKRequestHandler());
+		RequestHandlers.put("STO", new STORequestHandler());
+
 	}
 
 	public static void main(String[] args) throws TooManyListenersException{
+		
+		Calendar time = Calendar.getInstance();
 		init();
 		
 		try {
