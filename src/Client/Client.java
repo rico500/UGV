@@ -26,6 +26,15 @@ public class Client {
 	
 	public static HashMap<String, ClientRequestHandler> RequestHandlers = new HashMap<String, ClientRequestHandler>(); 
 	
+	//Steering variables
+	public static int speed = 0;
+	public static int rotation = 30;
+	
+	//key flags
+	public static boolean forward=false;
+	public static boolean backward = false;
+	public static boolean left = false;
+	public static boolean right = false;
 	
 	//fill RequestHandlers HashMap
 	private static void init(){

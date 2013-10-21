@@ -3,8 +3,8 @@ package Server;
 public class FORRequestHandler implements RequestHandler {
 
 	@Override
-	public void handleRequest() {
-		Server.serial.write("f,140|");
+	public void handleRequest(String opt) {
+		Server.serial.write("f,"+ opt+"|");
 
 	}
 

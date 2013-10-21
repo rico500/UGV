@@ -5,6 +5,6 @@ package Server;
 
 public interface RequestHandler {
 
-	public void handleRequest();
+	public void handleRequest(String opt);
 	
 }

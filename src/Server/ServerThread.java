@@ -65,9 +65,10 @@ extends Thread
 				message = messageFromClient.nextToken();
 				System.out.println(message);
 				
-				
+				//if valid the request is handled
 				if(Server.RequestHandlers.containsKey(message)){
-					Server.dispatchRequest(message);
+					System.out.println("test");
+					Server.RequestHandlers.get(message).handleRequest(messageFromClient.nextToken());
 				}
 			}
 			

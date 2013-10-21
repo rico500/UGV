@@ -50,10 +50,13 @@ public class GUI extends JFrame
    public String ipAddress;
    JTextField ipAddressTextField = new JTextField("localhost");
    JTextField portTextField = new JTextField("4444");
+   
    //shows connection message
    public static JLabel connectionMessage = new JLabel("Waiting for Connection...");
    
-   public static JSlider SpeedSlider = new JSlider(JSlider.VERTICAL, 0, 150, 0);
+   //Slider indicating relative speed (pwm)
+   public static JSlider SpeedSlider = new JSlider(JSlider.VERTICAL, 0, 150, Client.speed);
+   public static JSlider rotationSlider = new JSlider(JSlider.HORIZONTAL, 0, 50, Client.rotation);
    
    public static boolean debugging = false; //Disable this boolean to disable the debugs messages
    boolean connectionTabBool = true;
@@ -133,23 +136,29 @@ public class GUI extends JFrame
 	  
       controlTab = new JPanel();
       controlTab.setLayout(null);
-      Thread video = new Thread(new VideoRecever());
+      Thread video = new Thread(new VideoReceiver());
       
       video.start();
       
-      JTextField controlField = new UGVKeyListener("control");
+      JTextField controlField = new UGVKeyListener("Click here to start driving!");
       controlField.setEditable(false);
-      controlField.setBounds(150, 150, 100, 50);
+      controlField.setBounds(150, 130, 170, 50);
       controlTab.add(controlField);
       
       SpeedSlider.setMajorTickSpacing(20);
       SpeedSlider.setPaintTicks(true);
       SpeedSlider.setPaintLabels(true);
-      SpeedSlider.setBounds(400, 50, 100, 200);
+      SpeedSlider.setBounds(20, 50, 100, 200);
       controlTab.add(SpeedSlider);
+      
+      rotationSlider.setMajorTickSpacing(15);
+      rotationSlider.setPaintTicks(true);
+      rotationSlider.setPaintLabels(true);
+      rotationSlider.setBounds(130, 200, 300, 100);
+      controlTab.add(rotationSlider);
    }
    
-   class VideoRecever implements Runnable
+   class VideoReceiver implements Runnable
    {
 	   public void run()
 	   {
