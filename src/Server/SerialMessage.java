@@ -1,6 +1,7 @@
 package Server;
 
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 public class SerialMessage {
 	
@@ -9,20 +10,26 @@ public class SerialMessage {
 	public SerialMessage(){}
 	
 	public String getSerialMessage(){
-		
-		serialMessage = null;
-		System.out.println("Serial port event!");
-    	byte[] buffer = new byte[1024];
-    	try{
-			int length = Server.serial.in.available();
-			
-			Server.serial.in.read(buffer, 0, length);
-			serialMessage = new String(buffer);
-			System.out.println("Serial message: "+ serialMessage);
-		} catch (IOException e) {
-			e.printStackTrace();
-			
-		}
+		 byte[] buffer = new byte[1024];
+		 int data;
+         
+		 try
+         {
+             int len = 0;
+             while ( ( data = Server.serial.in.read()) > -1 )
+             {
+                 if ( data == '\n' ) {
+                     break;
+                 }
+                 buffer[len++] = (byte) data;
+             }
+             serialMessage = new String(buffer, 0, len);
+             System.out.print(serialMessage);
+         }
+         catch ( IOException e )
+         {
+             e.printStackTrace();
+         }             
     	
     	return serialMessage;
 	}
@@ -30,13 +37,14 @@ public class SerialMessage {
 	
 	public void dispatchMessage(String s){
 		
-		char command = s.charAt(0);
+		StringTokenizer st = new StringTokenizer(s,"|");
 		
-		switch(command){
-		case 'p':
-			System.out.println("Sending message to client: BUT|");
-			//TODO: tell all clients
-			Server.sendMessage(Server.serverThreads.get(0).out, "BUT|0");
+		switch (st.nextToken()){
+		case "s":
+			
+			Server.sendMessage("SES|"+st.nextToken()
+					+","+st.nextToken()
+					+","+st.nextToken());
 		}
 	}
 }
