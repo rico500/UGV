@@ -48,7 +48,7 @@ extends Thread
 		System.out.println("-----> Le client " + clientSocket.getInetAddress().getHostName() 
 				+" est connecte <------");
 		//Welcome message
-		Server.sendMessage(out, "|WEL|Successfully connected to server! Date: "+ time.getTime().toString());
+		out.println("|WEL|Successfully connected to server! Date: "+ time.getTime().toString());
 		System.out.println("WEL|Successfully connected to server! Date: "+ time.getTime().toString());
 		
 		
@@ -65,9 +65,9 @@ extends Thread
 				message = messageFromClient.nextToken();
 				System.out.println(message);
 				
-				
+				//if valid the request is handled
 				if(Server.RequestHandlers.containsKey(message)){
-					Server.dispatchRequest(message);
+					Server.RequestHandlers.get(message).handleRequest(messageFromClient.nextToken());
 				}
 			}
 			

@@ -6,7 +6,7 @@ public class ONRequestHandler implements RequestHandler {
 	public ONRequestHandler() {
 	}
 	
-	public void handleRequest() {
+	public void handleRequest(String opt) {
 		Server.serial.write("i");
 	}
 

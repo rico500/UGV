@@ -26,6 +26,20 @@ public class Client {
 	
 	public static HashMap<String, ClientRequestHandler> RequestHandlers = new HashMap<String, ClientRequestHandler>(); 
 	
+	//Steering variables
+	public static int speed = 0;
+	public static int rotation = 30;
+	
+	//key flags
+	public static boolean forward=false;
+	public static boolean backward = false;
+	public static boolean left = false;
+	public static boolean right = false;
+	
+	//sensor readings
+	public static int sensor1 = -1;
+	public static int sensor2 = -1;
+	public static int sensor3 = -1;
 	
 	//fill RequestHandlers HashMap
 	private static void init(){
@@ -35,6 +49,8 @@ public class Client {
 		//HashMap of request Handlers
 		RequestHandlers.put("WEL", new WELRequestHandler());
 		RequestHandlers.put("BUT", new BUTRequestHandler());
+		RequestHandlers.put("SES", new SESRequestHandler());
+		
 		//Start Graphical user interface
 		System.out.println("Launching GUI...");
 		GUI mainFrame = new GUI();

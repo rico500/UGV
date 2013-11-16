@@ -32,9 +32,11 @@ public class Server {
 	}
 		
 	//send message to Client
-	public static void sendMessage(PrintStream out, String message){
-		out.println(message);
-			
+	public static void sendMessage(String message){
+		int i;
+		for(i=0; i < serverThreads.size(); i++){
+			serverThreads.get(i).out.println(message);
+		}
 	}
 	
 	public static boolean isRequest(String request){
@@ -49,12 +51,12 @@ public class Server {
 	}
 	
 	//TODO handle speed option (second token)
-	public static void dispatchRequest(String request){
-		
-		RequestHandler handler = (RequestHandler)RequestHandlers.get(request);
-		
-		handler.handleRequest();
-	}
+//	public static void dispatchRequest(String request){
+//		
+//		RequestHandler handler = (RequestHandler)RequestHandlers.get(request);
+//		
+//		handler.handleRequest();
+//	}
 	
 	
 	
@@ -65,22 +67,7 @@ public class Server {
 
 			@Override
 			public void serialEvent(SerialPortEvent arg0) {
-//				String serialMessage = null;
-//				System.out.println("Serial port event!");
-//		    	byte[] buffer = new byte[1024];
-//		    	try{
-//					int length = serial.in.available();
-//					
-//					serial.in.read(buffer, 0, length);
-//					serialMessage = new String(buffer);
-//					System.out.println("Serial message: "+ serialMessage);
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//					
-//				}
-		    	
-		    	
-//		    	}
+				System.out.println("Serial Event!");
 				
 				SerialMessage arduino = new SerialMessage();
 				arduino.dispatchMessage(arduino.getSerialMessage());
@@ -95,7 +82,9 @@ public class Server {
 		RequestHandlers.put("FOR", new FORRequestHandler());
 		RequestHandlers.put("BAK", new BAKRequestHandler());
 		RequestHandlers.put("STO", new STORequestHandler());
-
+		RequestHandlers.put("LEF", new LEFRequestHandler());
+		RequestHandlers.put("RIG", new RIGRequestHandler());
+		RequestHandlers.put("CNT", new CNTRequestHandler());
 	}
 
 	public static void main(String[] args) throws TooManyListenersException{
