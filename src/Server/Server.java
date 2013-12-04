@@ -81,7 +81,7 @@ public class Server {
 		RequestHandlers.put("STO", new STORequestHandler());
 		RequestHandlers.put("LEF", new LEFRequestHandler());
 		RequestHandlers.put("RIG", new RIGRequestHandler());
-		RequestHandlers.put("CNT", new CNTRequestHandler());
+		RequestHandlers.put("CNT", new CNTRequestHandler()); 
 	}
 
 	public static void main(String[] args) throws TooManyListenersException{
