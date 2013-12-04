@@ -32,9 +32,11 @@ public class Server {
 	}
 		
 	//send message to Client
-	public static void sendMessage(PrintStream out, String message){
-		out.println(message);
-			
+	public static void sendMessage(String message){
+		int i;
+		for(i=0; i < serverThreads.size(); i++){
+			serverThreads.get(i).out.println(message);
+		}
 	}
 	
 	public static boolean isRequest(String request){
@@ -65,6 +67,7 @@ public class Server {
 
 			@Override
 			public void serialEvent(SerialPortEvent arg0) {
+				System.out.println("Serial Event!");
 				
 				SerialMessage arduino = new SerialMessage();
 				arduino.dispatchMessage(arduino.getSerialMessage());
