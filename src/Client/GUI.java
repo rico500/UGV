@@ -58,6 +58,11 @@ public class GUI extends JFrame
    public static JSlider SpeedSlider = new JSlider(JSlider.VERTICAL, 0, 150, Client.speed);
    public static JSlider rotationSlider = new JSlider(JSlider.HORIZONTAL, 0, 50, Client.rotation);
    
+   //sensor information
+   public static JLabel sensor1 = new JLabel("No value");
+   public static JLabel sensor2 = new JLabel("No value");
+   public static JLabel sensor3 = new JLabel("No value");
+   
    public static boolean debugging = false; //Disable this boolean to disable the debugs messages
    boolean connectionTabBool = true;
    Matcher checkAddress;
@@ -156,6 +161,23 @@ public class GUI extends JFrame
       rotationSlider.setPaintLabels(true);
       rotationSlider.setBounds(130, 200, 300, 100);
       controlTab.add(rotationSlider);
+      
+      JLabel sensor1Label = new JLabel("Left:"); 
+      sensor1Label.setBounds(340, 50, 45, 20);
+      controlTab.add(sensor1Label);
+      JLabel sensor2Label = new JLabel("Right:"); 
+      sensor2Label.setBounds(340, 75, 45, 20);
+      controlTab.add(sensor2Label);
+      JLabel sensor3Label = new JLabel("Back:"); 
+      sensor3Label.setBounds(340, 100, 45, 20);
+      controlTab.add(sensor3Label);
+      
+      sensor1.setBounds(390, 50, 45, 20);
+      controlTab.add(sensor1);
+      sensor2.setBounds(390, 75, 45, 20);
+      controlTab.add(sensor2);
+      sensor3.setBounds(390, 100, 45, 20);
+      controlTab.add(sensor3);
    }
    
    class VideoReceiver implements Runnable
