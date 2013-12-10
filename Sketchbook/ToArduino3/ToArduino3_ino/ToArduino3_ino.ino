@@ -20,7 +20,7 @@ NewPing sonar1(TRIGGER_PIN1, ECHO_PIN1, MAX_DISTANCE); // NewPing setup of pins 
 NewPing sonar2(TRIGGER_PIN2, ECHO_PIN2, MAX_DISTANCE);
 NewPing sonar3(TRIGGER_PIN3, ECHO_PIN3, MAX_DISTANCE);
 
-unsigned int pingSpeed = 200; // How frequently are we going to send out a ping (in milliseconds). 50ms would be 20 times a second.
+unsigned int pingSpeed = 500; // How frequently are we going to send out a ping (in milliseconds). 50ms would be 20 times a second.
 unsigned long pingTimer;     // Holds the next ping time.
 unsigned int cm1, cm2, cm3; //save distances
 
@@ -59,7 +59,7 @@ void loop(){
     Serial.print("|");
     Serial.print(cm2);
     Serial.print("|");
-    Serial.print(cm3);
+    Serial.println(cm3);
   }
   
   //if there is something to read...
@@ -107,7 +107,7 @@ void loop(){
       break;
     
       case 'r':
-        steer.write(130);
+        steer.write(intspd);
       break;
       
       case 'c':
@@ -115,7 +115,7 @@ void loop(){
       break;
       
       case 'l':
-        steer.write(50);
+        steer.write(intspd);
       break;
     }
     
