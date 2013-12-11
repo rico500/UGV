@@ -5,7 +5,7 @@
 //Define pins for motor
 #define A 12
 #define B 11
-#define E 3
+#define E 10
 
 //Define pins for Sensors
 #define TRIGGER_PIN1  7  
@@ -38,7 +38,7 @@ void setup(){
   pinMode(B, OUTPUT);
   pinMode(E, OUTPUT);
   
-  steer.attach(10);
+  steer.attach(6);
   
   pingTimer = millis(); // Start now.
 }
@@ -107,7 +107,7 @@ void loop(){
       break;
     
       case 'r':
-        steer.write(130);
+        steer.write(intspd);
       break;
       
       case 'c':
@@ -115,7 +115,7 @@ void loop(){
       break;
       
       case 'l':
-        steer.write(50);
+        steer.write(intspd);
       break;
     }
     
